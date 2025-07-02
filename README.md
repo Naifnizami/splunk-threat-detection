@@ -35,8 +35,10 @@ Ideal for cybersecurity training and portfolio projects.
 
 - Splunk Enterprise (9.x) & Universal Forwarder  
 - Python 3 + Flask  
+- PHP  
+- MySQL  
 - Linux VMs (Ubuntu, Kali)  
-- `iptables`, `arptables`, `curl`, `nc`  
+- iptables, arptables, curl, nc  
 - Git, GitHub
 
 ---
@@ -126,31 +128,53 @@ Here’s a short video walkthrough of the detection & blocking workflow:
 
 You can [download the Splunk Workflow video (Compressed)](Screenrecording/Splunk_Workflow_compressed.mp4) to watch it on your local machine.
 
-💡 Setup & Execution Steps
+## 💡 Setup & Execution Steps
 
-1.Launch the vulnerable PHP app from the web/ folder.
+### 1. Launch the vulnerable PHP app from the `web/` folder.
+   - Navigate to the `web/` folder and launch the vulnerable PHP application. This app will simulate the attack scenarios for SQLi and RCE.
 
-2.Import db/vulnsite_schema.sql into MariaDB.
+### 2. Import `db/vulnsite_schema.sql` into MariaDB.
+   - Import the database schema to set up the vulnerable site in MariaDB:
+     ```bash
+     mysql -u root -p < db/vulnsite_schema.sql
+     ```
 
-3.Deploy both Splunk Enterprise & Universal Forwarder.
+### 3. Deploy both **Splunk Enterprise** & **Universal Forwarder**.
+   - **Splunk Enterprise**: Install and configure Splunk Enterprise on the analysis host.
+   - **Splunk Universal Forwarder**: Install and configure the Universal Forwarder on the victim VM(s) to forward logs to Splunk Enterprise.
 
-4.Run blocker.py to listen on port 5000.
+### 4. Run `blocker.py` to listen on port 5000.
+   - Start the **blocker.py** script, which listens for malicious activity and blocks the attacker IPs via firewall.
+     ```bash
+     sudo python3 blocker.py
+     ```
 
-5.Create a Splunk alert using the following SPL query to catch malicious activity:
-index=* (sourcetype="access_combined" OR sourcetype="access-too_small" OR source="/var/log/auth.log" OR source="/var/log/syslog")
-| regex _raw="(?i)(/uploads/ReverseShell.php|session opened.*for user|nc -e|%27.*OR.*%3D|%271%27%3D%271)"
-| rex field=_raw "(?<attacker_ip>\d{1,3}(?:\.\d{1,3}){3})"
-| search attacker_ip=*
-| table _time, attacker_ip, source, sourcetype, _raw
+### 5. Create a Splunk alert using the following **SPL** query to catch malicious activity:
+   - In **Splunk**, create a new alert with the following **SPL** query:
+     ```spl
+     index=* (sourcetype="access_combined" OR sourcetype="access-too_small" OR source="/var/log/auth.log" OR source="/var/log/syslog")
+     | regex _raw="(?i)(/uploads/ReverseShell.php|session opened.*for user|nc -e|%27.*OR.*%3D|%271%27%3D%271)"
+     | rex field=_raw "(?<attacker_ip>\d{1,3}(?:\.\d{1,3}){3})"
+     | search attacker_ip=*
+     | table _time, attacker_ip, source, sourcetype, _raw
+     ```
 
-6.Configure the webhook alert action:
-http://<target‑ip>:5000/block?ip=$result.attacker_ip$&token=BLOCKME123
-(Optional) Enable throttled email alerts for visibility.
+### 6. Configure the **webhook alert action**:
+   - Set up a webhook in Splunk to trigger an IP block whenever a malicious attack is detected. Configure the webhook action as follows:
+     ```bash
+     http://<target-ip>:5000/block?ip=$result.attacker_ip$&token=BLOCKME123
+     ```
+   - *(Optional)*: Enable throttled email alerts for visibility into attack events.
 
-🎯 Goal
-Demonstrates security automation & response skills using SIEM, scripting, firewall, and alerting—excellent for demonstrating SOC competencies.
+---
 
-✉️ Contact
-Created by Naif Nizami · ★ Welcome to ⭐ this repo if you find it useful!
+## 🎯 Goal
 
+This project demonstrates **security automation** and **response skills** using **SIEM**, **scripting**, **firewall**, and **alerting** techniques. It’s excellent for showcasing **SOC competencies** and practical cybersecurity knowledge.
+
+---
+
+## ✉️ Contact
+
+Created by **Naif Nizami** · ★ **Welcome to ⭐ this repo** if you find it useful!
 
