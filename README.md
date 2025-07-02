@@ -75,27 +75,40 @@ Ideal for cybersecurity training and portfolio projects.
 | `web/`             | Vulnerable app source files (PHP, uploads, etc.)       |
 | `db/`              | Database schema (vulnsite\_schema.sql)                 |
 
-📸 Visuals & Walkthrough
+## 📸 Visuals & Walkthrough
 
-Splunk Dashboard – detection panels:
+- **Splunk Dashboard** – detection panels:
 
-Displays real-time detection of SQLi & RCE attempts, top attacker IPs, and malicious file access.
+   ![Splunk Dashboard](Screenshots/Dashboard-2.png)
+   *Displays real-time detection of SQLi & RCE attempts, top attacker IPs, and malicious file access.*
 
-Blocker Console – IP block logs:
+- **Blocker Console** – IP block logs:
 
-Displays logs of IPs blocked in response to detected attacks.
+   ![Blocker Console](Screenshots/Blocker_Console.png)
+   *Displays logs of IPs blocked in response to detected attacks.*
 
-Email Alert sample:
+- **Email Alert sample**:
 
-Example of an email sent when an attacker is detected.
+   ![Email Alert](Screenshots/Email_Alert.png)
+   *Example of an email sent when an attacker is detected.*
 
-SPL Query Result showing detected logs:
+- **SPL Query Result showing detected logs:**
 
-Result from the SPL query used to detect malicious activities.
+   ![SPL Query](Screenshots/SPL.png)
+   *Result from the SPL query used to detect malicious activities.*
 
-Vulnerable Web Interface – app used in testing:
+- **Vulnerable Web Interface** – app used in testing:
 
-Simulated vulnerable web application demonstrating SQLi & RCE exploitation.
+   ![Vulnerable Web Interface](Screenshots/Vulnerable_Website.png)
+   *Simulated vulnerable web application demonstrating SQLi & RCE exploitation.*
+
+---
+
+## 🎥 Walkthrough Video
+
+Here’s a short video walkthrough of the detection & blocking workflow:
+
+[![Splunk Workflow](Screenrecording/Splunk_Workflow.mkv)](Screenrecording/Splunk_Workflow.mkv)
 
 💡 Setup & Execution Steps
 
