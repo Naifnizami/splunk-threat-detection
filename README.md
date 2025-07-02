@@ -46,17 +46,33 @@ Ideal for cybersecurity training and portfolio projects.
 1. Install **Splunk Enterprise** on the main analysis host:  
    [Download Splunk Enterprise](https://www.splunk.com/en_us/download/splunk-enterprise.html?locale=en_us)
 
-2. Install **Splunk Universal Forwarder** on the monitored/victim VM(s):  
+2. Set up a **listening port** in Splunk Enterprise for data collection:
+   
+   To enable Splunk Enterprise to receive data from Universal Forwarders, you need to configure a listening port.
+
+   ### Steps to Configure a Listening Port in Splunk:
+   - Open Splunk Enterprise in your browser at `http://<splunk-server>:8000`.
+   - Log in with your **Splunk admin credentials**.
+   - In the **Splunk Web interface**, go to **Settings** > **Forwarding and Receiving** > **Configure Receiving**.
+   - Click on **New Receiving Port**.
+   - A pop-up window will appear to input the port.
+   - Enter **9997** (or your desired port number) in the input field and press **Enter**.
+   - You can enable or disable the port as needed. Ensure that the port is **enabled** to start receiving data from the Universal Forwarder.
+   - After entering the port, click **Save** to finalize the configuration.
+
+   This will make Splunk ready to listen on port `9997` (or your chosen port) for data from the **Universal Forwarder**.
+
+3. Install **Splunk Universal Forwarder** on the monitored/victim VM(s):  
    [Download UF (previous releases)](https://www.splunk.com/en_us/download/previous-releases-universal-forwarder.html)
 
-3. On victim VMs:
+4. On victim VMs:
    ```bash
    # Launch vulnerable PHP app in web folder
    # Import database schema:
    mysql -u root -p < db/vulnsite_schema.sql
 
    # Deploy UF config to monitor logs:
-   splunk add forward-server <your-splunk-ip>:9997
+   splunk add forward-server <your-splunk-ip>:9997  # (Splunk Enterprise IP)
    splunk add monitor /var/log/apache2/access.log
    splunk add monitor /var/log/auth.log
    splunk add monitor /var/log/syslog
