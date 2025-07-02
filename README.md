@@ -108,7 +108,7 @@ Ideal for cybersecurity training and portfolio projects.
 
 Here’s a short video walkthrough of the detection & blocking workflow:
 
-[Watch Splunk Workflow (Compressed Video)](Screenrecording/Splunk_Workflow_compressed.mp4)
+You can [download the Splunk Workflow video (Compressed)](Screenrecording/Splunk_Workflow_compressed.mp4) to watch it on your local machine.
 
 💡 Setup & Execution Steps
 
