@@ -89,7 +89,8 @@ Great for Blue Team projects, SOC labs, and resume-worthy demonstrations.
    - `/var/log/syslog`
 4. **Run `blocker.py`** to listen on port `5000` for block requests.
 5. **Set up Splunk alert** using SPL to detect malicious patterns.
-6. **Webhook URL** format:http://<target-ip>:5000/block?ip=$result.attacker_ip$&token=BLOCKME123
+6. **Webhook URL** format:
+http://<target-ip>:5000/block?ip=$result.attacker_ip$&token=BLOCKME123
 7. **Optional: Add throttle & email alert** for visibility.
 
 ---
