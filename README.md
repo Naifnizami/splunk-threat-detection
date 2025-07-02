@@ -108,7 +108,7 @@ Ideal for cybersecurity training and portfolio projects.
 
 Here’s a short video walkthrough of the detection & blocking workflow:
 
-[![Splunk Workflow](Screenrecording/Splunk_Workflow.mkv)](Screenrecording/Splunk_Workflow.mkv)
+[Watch Splunk Workflow (Compressed Video)](Screenrecording/Splunk_Workflow_compressed.mp4)
 
 💡 Setup & Execution Steps
 
