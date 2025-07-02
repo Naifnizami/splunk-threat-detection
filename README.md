@@ -10,8 +10,8 @@ A practical threat detection and response system using **Splunk** and a custom *
   - SQL Injection (SQLi) attempts
   - Reverse shell payload access
 - 🔒 IP auto-blocking using `iptables` + `arptables` via webhook
-- 📬 Email alerts with attacker IP and evidence
-- 📊 Splunk dashboards:
+- 📬 Email alerts with attacker IP and log evidence
+- 📊 Splunk dashboards with:
   - Top attacker IPs
   - Malicious file access attempts
   - Alert frequency over time
@@ -23,41 +23,48 @@ A practical threat detection and response system using **Splunk** and a custom *
 
 This project replicates a **real-world SOC detection-response workflow**, integrating:
 
-- Apache access log monitoring
-- Python-based API for blocking attackers
-- Splunk alerting & automated webhook triggering
+- Apache log monitoring (access, syslog, auth)
+- Python API-based IP blocking mechanism
+- Splunk alerts → Webhook trigger for automated blocking
 
-Perfect for security analysts and blue teamers in training.
+Great for Blue Team projects, SOC labs, and resume-worthy demonstrations.
 
 ---
 
-## 📂 Files
+## 📂 Project Structure
 
-| File/Folder        | Description                                        |
-|--------------------|----------------------------------------------------|
-| `blocker.py`       | Python Flask API to block IPs via firewall rules  |
-| `screenshots/`     | Evidence of detection, email, blocking, dashboards|
-| `splunk/`          | Saved alerts, SPL queries, and setup docs         |
+| Path               | Description                                         |
+|--------------------|-----------------------------------------------------|
+| `blocker.py`       | Flask API server that blocks IPs via iptables & arptables |
+| `web/`             | Vulnerable PHP site (login, upload, dashboard)     |
+| `db/`              | MySQL database schema file (`vulnsite_schema.sql`) |
+| `screenshots/`     | Email alert, dashboard panels, SPL, blocker logs   |
+| `splunk/`          | SPL queries and Splunk alert configurations        |
+| `README.md`        | Project documentation (you’re reading it)          |
 
 ---
 
 ## 📸 Screenshots
 
-### 🖥️ 1. Splunk Dashboard (Live Detection Panels)
-![Dashboard](screenshots/Dashboard-2.png)
+### 🖥️ Splunk Dashboard Panels
+- Visuals showing attacker trends, frequency, and accessed files
+![Dashboard Panels](screenshots/Dashboard-2.png)
 
-### 🚫 2. Auto-Blocking Console Log
+### 🧾 Webhook-Triggered IP Blocking Console
+- Confirming IPs getting blocked live
 ![Blocker Console](screenshots/Blocker_Console.png)
 
-### 📬 3. Email Alert Sample
+### 📬 Email Alert Example
+- Alert with log snippet, attacker IP, and timestamp
 ![Email Alert](screenshots/Email_Alert.png)
 
-### 💡 4. SPL Matching RCE + SQLi Logs
-![SPL Result](screenshots/SPL.png)
+### 🔍 SPL Matching Log Events
+- RCE and SQLi activity captured and highlighted
+![SPL Results](screenshots/SPL.png)
 
-### 🌐 Vulnerable Web Application Interface
-![Web Interface](screenshots/Vulnerable_Website.png)  
-*Landing page of the intentionally vulnerable PHP app used to simulate SQLi and reverse shell attacks.*
+### 🌐 Vulnerable Web Interface
+- Entry point for simulated SQLi and shell uploads
+![Web App](screenshots/Vulnerable_Website.png)
 
 ---
 
@@ -65,26 +72,30 @@ Perfect for security analysts and blue teamers in training.
 
 - Splunk 9.x
 - Python 3 + Flask
-- Linux (Ubuntu, Kali)
-- iptables, arptables
-- curl, netcat
+- iptables / arptables
+- Apache2 logs (`access.log`, `auth.log`, `syslog`)
+- MySQL (vulnsite schema)
+- Ubuntu + Kali Linux
 
 ---
 
-## 📝 Setup Summary
+## ⚙️ Setup Steps
 
-1. **Deploy vulnerable app** (PHP-based login/upload).
-2. **Configure Splunk forwarder** to monitor:
+1. **Launch vulnerable PHP web app** (from `/web/` folder).
+2. **Import database schema** from `db/vulnsite_schema.sql`.
+3. **Deploy Splunk Universal Forwarder** on target machine and monitor:
    - `/var/log/apache2/access.log`
-   - `/var/log/auth.log`, `/var/log/syslog`
-3. **Deploy `blocker.py`** on the target VM.
-4. **Create Splunk alerts** with webhook trigger:
-   - `http://<target-ip>:5000/block?ip=$result.attacker_ip$&token=BLOCKME123`
-5. **Enable email alert** for same SPL with throttle.
+   - `/var/log/auth.log`
+   - `/var/log/syslog`
+4. **Run `blocker.py`** to listen on port `5000` for block requests.
+5. **Set up Splunk alert** using SPL to detect malicious patterns.
+6. **Webhook URL** format:http://<target-ip>:5000/block?ip=$result.attacker_ip$&token=BLOCKME123
+7. **Optional: Add throttle & email alert** for visibility.
 
 ---
 
-## ✉️ Contact
+## 📬 Contact
 
-Made with 💻 by [Naif Nizami](https://github.com/Naifnizami)  
-⭐ Star this repo if you find it useful for learning or security portfolio building.
+Made with 🛡️ by [Naif Nizami](https://github.com/Naifnizami)  
+⭐ Star this project if it helps your security journey or lab demos!
+
